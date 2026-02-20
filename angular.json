@@ -7,7 +7,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "offers-mvp": {
+    "rebuy-marketplace": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:class": {
@@ -82,13 +82,19 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "offers-mvp:build:production"
+              "buildTarget": "rebuy-marketplace:build:production"
             },
             "development": {
-              "buildTarget": "offers-mvp:build:development"
+              "buildTarget": "rebuy-marketplace:build:development"
             }
           },
           "defaultConfiguration": "development"
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "tsConfig": "tsconfig.spec.json"
+          }
         }
       }
     }

@@ -1,5 +1,5 @@
 [build]
-  command = "npm run build"
+  command = "npx ng test --watch=false && npm run build"
   publish = "dist/rebuy-marketplace/browser"
 
 [[redirects]]
