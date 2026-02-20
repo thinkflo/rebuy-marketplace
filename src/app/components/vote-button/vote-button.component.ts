@@ -6,7 +6,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
     <div class="flex flex-col items-center gap-1">
       <button
         (click)="onUpvote.emit(); $event.stopPropagation()"
-        class="w-8 h-8 flex items-center justify-center rounded-md text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 transition-all"
+        class="w-8 h-8 flex cursor-pointer items-center justify-center rounded-md text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 transition-all"
         aria-label="Upvote"
       >
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
@@ -18,7 +18,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
       </span>
       <button
         (click)="onDownvote.emit(); $event.stopPropagation()"
-        class="w-8 h-8 flex items-center justify-center rounded-md text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all"
+        class="w-8 h-8 flex cursor-pointer items-center justify-center rounded-md text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all"
         aria-label="Downvote"
       >
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">

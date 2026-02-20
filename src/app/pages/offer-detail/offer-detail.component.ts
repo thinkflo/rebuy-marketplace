@@ -79,7 +79,7 @@ import { PurchaseModalComponent } from '../../components/purchase-modal/purchase
             <div class="mt-6">
               <button
                 (click)="showPurchaseModal.set(true)"
-                class="w-full sm:w-auto px-6 py-3 text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-colors"
+                class="w-full sm:w-auto px-6 py-3 cursor-pointer text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-colors"
               >
                 Purchase This Offer
               </button>

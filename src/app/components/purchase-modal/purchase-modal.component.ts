@@ -32,13 +32,13 @@ import { Offer } from '../../models/offer.model';
             <div class="mt-6 flex gap-3">
               <button
                 (click)="close.emit()"
-                class="flex-1 px-4 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+                class="flex-1 px-4 py-2.5 cursor-pointer text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
               >
                 Cancel
               </button>
               <button
                 (click)="onPurchase()"
-                class="flex-1 px-4 py-2.5 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-colors"
+                class="flex-1 px-4 py-2.5 cursor-pointer text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-colors"
               >
                 Purchase Now
               </button>
@@ -56,7 +56,7 @@ import { Offer } from '../../models/offer.model';
               </p>
               <button
                 (click)="close.emit()"
-                class="mt-6 w-full px-4 py-2.5 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-colors"
+                class="mt-6 w-full px-4 py-2.5 cursor-pointer text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-colors"
               >
                 Done
               </button>
