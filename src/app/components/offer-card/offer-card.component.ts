@@ -35,11 +35,11 @@ import { DEFAULT_CURRENCY_CODE } from '../../core/constants';
 
             <!-- Details -->
             <div class="flex-1 min-w-0">
-              <div class="flex items-start justify-between gap-2">
-                <h3 class="text-lg font-semibold text-gray-900 truncate">
+              <div class="flex flex-col gap-0.5 sm:flex-row sm:items-start sm:justify-between sm:gap-2">
+                <h3 class="text-sm font-semibold text-gray-900 break-words sm:text-lg sm:truncate">
                   {{ offer.title }}
                 </h3>
-                <span class="flex-shrink-0 text-lg font-bold text-emerald-600">
+                <span class="text-sm font-bold text-emerald-600 shrink-0 sm:text-lg">
                   {{ offer.price | currency: currencyCode }}
                 </span>
               </div>
