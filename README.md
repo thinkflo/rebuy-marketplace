@@ -2,6 +2,10 @@
 
 A community-driven offers platform built with **Angular 21**, **Tailwind CSS v4**, and **MockAPI.io**.
 
+## About
+
+Community-driven offers MVP: browse deals, vote to rank them, and run through a purchase-style flow. Built with Angular 21 (signals, standalone components), Tailwind CSS v4, and MockAPI.io. Live at **https://rebuy-marketplace.netlify.app/**
+
 ## Features
 
 - Browse offers sorted by community votes
@@ -29,6 +33,7 @@ Open [http://localhost:4200](http://localhost:4200)
 - **Client-side re-sort** — Server sorts on initial load; votes re-sort locally for instant feedback.
 - **Smart/presentational split** — Pages own state and API calls; components receive inputs and emit events.
 - **Single source of truth** — Route paths and param names live in `app.routes.ts`; display currency and sort helpers in `core/` to keep links and behaviour consistent and easy to change.
+- **No global state management (by design)** — For this MVP, each page owns its own state; there is no shared store. Adding shared offer state (and perf optimizations like caching and further lazy loading) is intended as one of the first steps when evolving beyond the MVP.
 
 ## Project Structure
 
