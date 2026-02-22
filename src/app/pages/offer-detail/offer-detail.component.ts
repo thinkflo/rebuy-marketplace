@@ -5,6 +5,8 @@ import { OfferService } from '../../services/offer.service';
 import { Offer } from '../../models/offer.model';
 import { VoteButtonComponent } from '../../components/vote-button/vote-button.component';
 import { PurchaseModalComponent } from '../../components/purchase-modal/purchase-modal.component';
+import { ROUTE_PARAM_OFFER_ID } from '../../app.routes';
+import { DEFAULT_CURRENCY_CODE } from '../../core/constants';
 
 @Component({
   selector: 'app-offer-detail',
@@ -56,7 +58,7 @@ import { PurchaseModalComponent } from '../../components/purchase-modal/purchase
                 <h1 class="text-2xl font-bold text-gray-900">{{ offer()!.title }}</h1>
                 <div class="mt-2 flex flex-wrap items-center gap-3">
                   <span class="text-2xl font-bold text-emerald-600">
-                    {{ offer()!.price | currency: 'EUR' }}
+                    {{ offer()!.price | currency: currencyCode }}
                   </span>
                   <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
                     {{ offer()!.category }}
@@ -102,13 +104,15 @@ export class OfferDetailComponent implements OnInit {
   error = signal<string | null>(null);
   showPurchaseModal = signal(false);
 
+  protected readonly currencyCode = DEFAULT_CURRENCY_CODE;
+
   constructor(
     private route: ActivatedRoute,
     private offerService: OfferService
   ) {}
 
   ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id');
+    const id = this.route.snapshot.paramMap.get(ROUTE_PARAM_OFFER_ID);
     if (id) {
       this.offerService.getOffer(id).subscribe({
         next: (offer) => {

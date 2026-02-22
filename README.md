@@ -28,26 +28,30 @@ Open [http://localhost:4200](http://localhost:4200)
 - **Optimistic voting with rollback** — UI updates instantly, reverts on API failure.
 - **Client-side re-sort** — Server sorts on initial load; votes re-sort locally for instant feedback.
 - **Smart/presentational split** — Pages own state and API calls; components receive inputs and emit events.
+- **Single source of truth** — Route paths and param names live in `app.routes.ts`; display currency and sort helpers in `core/` to keep links and behaviour consistent and easy to change.
 
 ## Project Structure
 
 ```
 src/app/
+├── core/
+│   ├── constants.ts             # App-wide constants (e.g. default currency)
+│   └── offer.utils.ts            # sortOffersByVotesDesc() for client re-sort
 ├── models/
 │   └── offer.model.ts            # Offer interface
 ├── services/
-│   └── offer.service.ts          # HTTP service; parseOffer() coercion on GET responses
+│   └── offer.service.ts          # HTTP service; parseOffer() on GET and PUT responses
 ├── components/
 │   ├── header/                   # Sticky nav header
 │   ├── offer-card/               # List item card (presentational)
 │   ├── vote-button/              # Reusable vote controls
-│   └── purchase-modal/           # Two-state purchase confirmation
+│   └── purchase-modal/           # Two-state confirmation; resets state when closed
 ├── directives/
 │   └── flip.directive.ts         # FLIP animation for list reorder
 ├── pages/
 │   ├── offer-list/               # Home — sorted offers with voting
 │   └── offer-detail/             # Single offer with purchase flow
-├── app.routes.ts                 # Lazy-loaded route config
+├── app.routes.ts                 # Lazy-loaded routes; exports ROUTE_OFFERS_SEGMENT, ROUTE_PARAM_OFFER_ID
 ├── app.config.ts                 # Providers (HttpClient, Router)
 ├── app.ts                        # Root component
 ├── app.html                      # Root template

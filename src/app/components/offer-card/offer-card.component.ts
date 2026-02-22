@@ -3,6 +3,8 @@ import { RouterLink } from '@angular/router';
 import { CurrencyPipe } from '@angular/common';
 import { Offer } from '../../models/offer.model';
 import { VoteButtonComponent } from '../vote-button/vote-button.component';
+import { ROUTE_OFFERS_SEGMENT } from '../../app.routes';
+import { DEFAULT_CURRENCY_CODE } from '../../core/constants';
 
 @Component({
   selector: 'app-offer-card',
@@ -20,7 +22,7 @@ import { VoteButtonComponent } from '../vote-button/vote-button.component';
         </div>
 
         <!-- Content -->
-        <a [routerLink]="['/offers', offer.id]" class="flex-1 p-4 pl-0 cursor-pointer">
+        <a [routerLink]="['/', offerRouteSegment, offer.id]" class="flex-1 p-4 pl-0 cursor-pointer">
           <div class="flex flex-col sm:flex-row gap-4">
             <!-- Image -->
             <div class="flex-shrink-0">
@@ -38,7 +40,7 @@ import { VoteButtonComponent } from '../vote-button/vote-button.component';
                   {{ offer.title }}
                 </h3>
                 <span class="flex-shrink-0 text-lg font-bold text-emerald-600">
-                  {{ offer.price | currency: 'EUR' }}
+                  {{ offer.price | currency: currencyCode }}
                 </span>
               </div>
               <p class="mt-1 text-sm text-gray-500 line-clamp-2">
@@ -60,4 +62,7 @@ export class OfferCardComponent {
   @Input({ required: true }) offer!: Offer;
   @Output() upvote = new EventEmitter<Offer>();
   @Output() downvote = new EventEmitter<Offer>();
+
+  protected readonly offerRouteSegment = ROUTE_OFFERS_SEGMENT;
+  protected readonly currencyCode = DEFAULT_CURRENCY_CODE;
 }

@@ -1,6 +1,14 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { Offer } from '../../models/offer.model';
+import { DEFAULT_CURRENCY_CODE } from '../../core/constants';
 
 @Component({
   selector: 'app-purchase-modal',
@@ -11,7 +19,7 @@ import { Offer } from '../../models/offer.model';
         <!-- Backdrop -->
         <div
           class="absolute inset-0 bg-black/50 backdrop-blur-sm"
-          (click)="close.emit()"
+          (click)="onClose()"
         ></div>
 
         <!-- Modal -->
@@ -25,13 +33,13 @@ import { Offer } from '../../models/offer.model';
             <div class="mt-4 p-4 bg-gray-50 rounded-lg">
               <h3 class="font-semibold text-gray-900">{{ offer.title }}</h3>
               <p class="mt-1 text-2xl font-bold text-emerald-600">
-                {{ offer.price | currency: 'EUR' }}
+                {{ offer.price | currency: currencyCode }}
               </p>
             </div>
 
             <div class="mt-6 flex gap-3">
               <button
-                (click)="close.emit()"
+                (click)="onClose()"
                 class="flex-1 px-4 py-2.5 cursor-pointer text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
               >
                 Cancel
@@ -55,7 +63,7 @@ import { Offer } from '../../models/offer.model';
                 Your purchase of <strong>{{ offer.title }}</strong> has been confirmed.
               </p>
               <button
-                (click)="close.emit()"
+                (click)="onClose()"
                 class="mt-6 w-full px-4 py-2.5 cursor-pointer text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-colors"
               >
                 Done
@@ -76,15 +84,25 @@ import { Offer } from '../../models/offer.model';
     }
   `,
 })
-export class PurchaseModalComponent {
+export class PurchaseModalComponent implements OnChanges {
   @Input() isOpen = false;
   @Input() offer: Offer | null = null;
   @Output() close = new EventEmitter<void>();
 
+  protected readonly currencyCode = DEFAULT_CURRENCY_CODE;
   purchased = false;
 
-  onPurchase() {
-    // Simulate purchase — in production, this would call the real platform API
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['isOpen'] && !this.isOpen) {
+      this.purchased = false;
+    }
+  }
+
+  onClose(): void {
+    this.close.emit();
+  }
+
+  onPurchase(): void {
     this.purchased = true;
   }
 }

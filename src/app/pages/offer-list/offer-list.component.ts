@@ -2,7 +2,11 @@ import { Component, OnInit, signal } from '@angular/core';
 import { OfferService } from '../../services/offer.service';
 import { Offer } from '../../models/offer.model';
 import { OfferCardComponent } from '../../components/offer-card/offer-card.component';
-import { FlipDirective } from '../../directives/flip.directive'; 
+import { FlipDirective } from '../../directives/flip.directive';
+import { sortOffersByVotesDesc } from '../../core/offer.utils';
+
+const SKELETON_COUNT = 3;
+const LOAD_ERROR_MESSAGE = 'Failed to load offers. Please check your API configuration.';
 
 @Component({
   selector: 'app-offer-list',
@@ -18,7 +22,7 @@ import { FlipDirective } from '../../directives/flip.directive';
 
       @if (loading()) {
         <div class="space-y-4">
-          @for (i of [1, 2, 3]; track i) {
+          @for (i of skeletonItems; track i) {
             <div class="bg-white rounded-lg border border-gray-200 p-4 animate-pulse">
               <div class="flex gap-4">
                 <div class="w-10 flex flex-col items-center gap-2">
@@ -70,13 +74,16 @@ export class OfferListComponent implements OnInit {
   loading = signal(true);
   error = signal<string | null>(null);
 
+  /** Number of skeleton placeholders shown while loading. */
+  protected readonly skeletonItems = Array.from({ length: SKELETON_COUNT }, (_, i) => i + 1);
+
   constructor(private offerService: OfferService) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadOffers();
   }
 
-  loadOffers() {
+  loadOffers(): void {
     this.loading.set(true);
     this.error.set(null);
     this.offerService.getOffers().subscribe({
@@ -85,32 +92,32 @@ export class OfferListComponent implements OnInit {
         this.loading.set(false);
       },
       error: (err) => {
-        this.error.set('Failed to load offers. Please check your API configuration.');
+        this.error.set(LOAD_ERROR_MESSAGE);
         this.loading.set(false);
         console.error('Error loading offers:', err);
       },
     });
   }
 
-onUpvote(offer: Offer) {
+  onUpvote(offer: Offer): void {
     offer.votes++;
-    this.offers.update(offers => [...offers].sort((a, b) => b.votes - a.votes));
+    this.offers.update((list) => sortOffersByVotesDesc(list));
     this.offerService.upvote(offer).subscribe({
       error: () => {
         offer.votes--;
-        this.offers.update(offers => [...offers].sort((a, b) => b.votes - a.votes));
+        this.offers.update((list) => sortOffersByVotesDesc(list));
       },
     });
   }
 
-  onDownvote(offer: Offer) {
+  onDownvote(offer: Offer): void {
     if (offer.votes <= 0) return;
     offer.votes--;
-    this.offers.update(offers => [...offers].sort((a, b) => b.votes - a.votes));
+    this.offers.update((list) => sortOffersByVotesDesc(list));
     this.offerService.downvote(offer).subscribe({
       error: () => {
         offer.votes++;
-        this.offers.update(offers => [...offers].sort((a, b) => b.votes - a.votes));
+        this.offers.update((list) => sortOffersByVotesDesc(list));
       },
     });
   }
