@@ -5,7 +5,7 @@ import { Offer } from '../models/offer.model';
 import { environment } from '../../environments/environment';
 
 /** API may return price/votes as strings; we coerce to number for the app model. */
-export type RawOffer = Omit<Offer, 'price' | 'votes'> & {
+type RawOffer = Omit<Offer, 'price' | 'votes'> & {
   price?: string | number;
   votes?: string | number;
 };

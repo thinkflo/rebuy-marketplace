@@ -111,7 +111,7 @@ export class OfferDetailComponent implements OnInit {
     private offerService: OfferService
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get(ROUTE_PARAM_OFFER_ID);
     if (id) {
       this.offerService.getOffer(id).subscribe({
@@ -125,6 +125,9 @@ export class OfferDetailComponent implements OnInit {
           console.error('Error loading offer:', err);
         },
       });
+    } else {
+      this.loading.set(false);
+      this.error.set('Invalid offer.');
     }
   }
 
