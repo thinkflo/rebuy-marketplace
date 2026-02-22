@@ -1,20 +1,18 @@
-# rebuy Marketplace OfferBoard MVP
+# rebuy Marketplace
 
-A community-driven offers platform built with **Angular 21** and **Tailwind CSS v4**, using **MockAPI.io** as the backend.
+A community-driven offers platform built with **Angular 21**, **Tailwind CSS v4**, and **MockAPI.io**.
 
 ## Features
 
-- Browse all offers sorted by community votes
-- View detailed offer pages
-- Upvote / downvote offers (optimistic updates with rollback)
-- Purchase offers via modal flow
-- Responsive design (mobile-first)
+- Browse offers sorted by community votes
+- Detailed offer pages with category and date metadata
+- Upvote/downvote with optimistic updates and automatic rollback on failure
+- Purchase confirmation modal flow
+- Responsive, mobile-first design
 - Lazy-loaded routes
-- Flip Animation for real-time resorting
+- FLIP animation on list reorder
 
-## Setup
-
-### 1. Run
+## Quick Start
 
 ```bash
 npm install
@@ -23,38 +21,70 @@ ng serve
 
 Open [http://localhost:4200](http://localhost:4200)
 
+## Architecture Decisions
+
+- **Zoneless + Signals** — Angular 21's default (no zone.js). All reactive state uses signals for native change detection.
+- **Standalone components** — No NgModules; explicit imports per component.
+- **Optimistic voting with rollback** — UI updates instantly, reverts on API failure.
+- **Client-side re-sort** — Server sorts on initial load; votes re-sort locally for instant feedback.
+- **Smart/presentational split** — Pages own state and API calls; components receive inputs and emit events.
+
 ## Project Structure
 
 ```
 src/app/
 ├── models/
-│   └── offer.model.ts          # Offer interface
+│   └── offer.model.ts            # Offer interface
 ├── services/
-│   └── offer.service.ts        # MockAPI HTTP service
+│   └── offer.service.ts          # HTTP service; parseOffer() coercion on GET responses
 ├── components/
-│   ├── header/                 # Sticky nav header
-│   ├── offer-card/             # List item card
-│   ├── vote-button/            # Reusable vote controls
-│   └── purchase-modal/         # Purchase confirmation modal
+│   ├── header/                   # Sticky nav header
+│   ├── offer-card/               # List item card (presentational)
+│   ├── vote-button/              # Reusable vote controls
+│   └── purchase-modal/           # Two-state purchase confirmation
+├── directives/
+│   └── flip.directive.ts         # FLIP animation for list reorder
 ├── pages/
-│   ├── offer-list/             # Home page — all offers sorted by votes
-│   └── offer-detail/           # Single offer view with purchase
-├── app.routes.ts               # Client-side routing (lazy loaded)
-├── app.config.ts               # App providers (HttpClient, Router)
-└── app.ts                      # Root component
+│   ├── offer-list/               # Home — sorted offers with voting
+│   └── offer-detail/             # Single offer with purchase flow
+├── app.routes.ts                 # Lazy-loaded route config
+├── app.config.ts                 # Providers (HttpClient, Router)
+├── app.ts                        # Root component
+├── app.html                      # Root template
+└── app.css                       # Root styles
 ```
 
-## API Endpoints Used
+## API Endpoints
 
-| Method | Endpoint                              | Purpose        |
-|--------|---------------------------------------|----------------|
-| GET    | `/offers?sortBy=votes&order=desc`     | List offers     |
-| GET    | `/offers/:id`                         | Offer detail    |
-| PUT    | `/offers/:id`                         | Update votes    |
+The base URL is set in `src/environments/environment.ts` (`apiUrl`); point it at your MockAPI.io app or backend.
+
+| Method | Endpoint                          | Purpose      |
+|--------|-----------------------------------|--------------|
+| GET    | `/offers?sortBy=votes&order=desc` | List offers  |
+| GET    | `/offers/:id`                     | Offer detail |
+| PUT    | `/offers/:id`                     | Update votes |
+
+## Testing
+
+67 tests across 7 spec files using Angular CLI's Vitest integration (`@angular/build:unit-test`). Zoneless mode is configured in `src/test-setup.ts` via `@analogjs/vitest-angular/setup-testbed` with `setupTestBed({ zoneless: true })`. Tests use `async/await` + `fixture.whenStable()` — no zone.js dependency.
+
+```bash
+npx ng test
+```
+
+## Deployment
+
+Hosted on Netlify. Tests gate the deploy — a failing test blocks the build.
+
+```toml
+[build]
+  command = "npx ng test --watch=false && npm run build"
+```
 
 ## Tech Stack
 
-- Angular 21 (standalone components, control flow syntax)
+- Angular 21 (signals, standalone components, `@if`/`@for` control flow)
 - Tailwind CSS v4
-- MockAPI.io (REST backend)
-- TypeScript
+- MockAPI.io
+- Vitest via `@angular/build:unit-test`
+- Netlify
